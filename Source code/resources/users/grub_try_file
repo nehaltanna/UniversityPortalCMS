@@ -1,0 +1,13 @@
+default=0
+timeout=5
+splashimage=(hd0,8)/boot/grub/splash.xpm.gz
+hiddenmenu
+title Windows XP
+        rootnoverify (hd0,0)
+        chainloader +1
+title BACK_TRACK 5
+        root (hd0,7)
+        kernel  /boot/vmlinuz-2.6.38 root=UUID=aea8402e-57a1-43fb-98e6-1001fa6ac47b ro   text splash nomodeset vga=791
+        initrd  /boot/initrd.img-2.6.38
+
+

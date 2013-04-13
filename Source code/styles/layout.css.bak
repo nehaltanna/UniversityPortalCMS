@@ -1,0 +1,328 @@
+.div_main
+{
+	margin-left:100px;
+	margin-right:100px;
+	width=1085px;
+}
+.div_header
+{
+
+	margin-bottom:10px;
+	background-color:#990B09;
+}
+.div_header_top
+{
+	text-align:right;
+	padding-bottom:5px;
+	padding-top:5px;
+}
+.font_strong
+{
+	font-weight:bolder;
+	font-size:20px;
+}
+.link_regular
+{
+	color:#CCCCCC;
+}
+.div_header_middle
+{
+	margin-top:5px;
+}
+.img_header
+{
+	width:1005px;
+	margin-left:20px;
+	margin-right:20px;
+}
+.div_header_bottom
+{
+	height:expression(20 + "px");
+	background-color:#990B09;
+	text-align:right;
+	padding-bottom:5px;
+	padding-top:5px;
+}
+.search_button
+{
+	background-color:#990B09;
+	width:20px;
+	height:20px;
+}
+.div_menu
+{
+	background-color:#CCCCCC;
+}
+.menu_table
+{
+	margin-left:25px;
+	margin-right:25px;	
+	text-align:center;
+	width:1000px;
+	padding-top:3px;
+	padding-bottom:3px;
+}
+.link_menu
+{
+	text-align:center;
+	text-transform:uppercase;
+	text-decoration:none;
+	font-size:20px;
+	color:#000000;
+}
+.div_middle
+{
+	margin-top:10px;
+	width:1050px;
+	background-color:#990B09;
+	display:inline-block;
+}
+.div_middle_left
+{
+	padding-top:10px;
+	float:left;
+	width:205px;
+	height:inherit;
+	background-color:#990B09;
+	min-height:627px;
+	height:expression(600 + "px");
+}
+.div_middle_right
+{
+	float:right;
+	width:845px;
+	margin-bottom:5px;
+	min-height:627px;
+	height:expression(610 + "px");
+}
+.div_middle_right_left
+{
+
+	background-color:#FFFFFF;
+	width:640px;
+	float:left;
+	min-height:650px;
+	height:expression(610 + "px");
+	margin-bottom:5px;
+	color:#000000;
+}
+.div_middle_right_right
+{
+	height:expression(610 + "px");
+	background-color:#990B09;
+	width:205px;
+	float:right;
+	margin-bottom:8px;	
+}
+.menu_left
+{
+	width:205px;
+	text-align:center;
+}
+.menu_left_row
+{
+	font-size:18px;
+	line-height:25px;
+}
+.div_middle_right_right_middle
+{
+	margin-top:25px;
+	color:#CCCCCC;
+}
+.link_menu_left
+{
+	text-decoration:none;
+	font-size:x-large;
+	color:#CCCCCC;
+}
+.title
+{
+	background-color:#FFFFFF;
+	color:#000000;
+	text-align:center;
+	margin-top:20px;
+	font-size:20px;
+	margin-left:5px;
+	margin-right:5px;
+}
+.img_recruiters
+{
+	margin-left:8px;
+	margin-right:8px;
+	width:183px;
+	height:100px;
+	background-color:#FFFFFF;
+}
+.tbl_login
+{
+	text-align:center;
+}
+.tbl_login_row
+{
+	font-size:13px;
+	font-weight:bolder;
+}
+.div_footer
+{
+	width:1050px;
+	background-color:#990B09;
+}
+.div_footer_left
+{
+	float:left;
+	width:expression(380 + "px");
+	width:385px;
+	background-color:#990B09;
+	font-size:16px;	
+	padding:20px;
+	padding-bottom:10px;
+	min-height:160px;
+	max-height:160px;
+	margin-bottom:10px;
+}
+.div_footer_left_text
+{
+	font-size:24px;
+	color:#CCCCCC;
+	padding-left:10px;
+}
+.div_footer_right
+{
+	width:expression(630 + "px");
+	width:625px;
+	float:right;
+	margin-bottom:10px;
+}
+.div_footer_right_left
+{
+	max-height:155px;  /*for linux fedora*/
+	text-align:justify;
+	font-size:20px;
+	font-style:italic;
+	color:#CCCCCC;
+	padding:20px;
+	background-color:#990B09;
+	width:380px;
+	float:left;
+	margin-bottom:10px;
+}
+.div_footer_right_right
+{
+	padding-top:17px;
+	color:#CCCCCC;
+	font-size:18px;
+	text-align:center;
+	background-color:#990B09;
+	width:205px;
+	float:right;
+	margin-bottom:10px;
+}
+.footer_image
+{
+	float:left;
+	padding-right:20px;
+}
+.footer_menu
+{
+	background-color:#FFFFFF;
+	margin-bottom:10px;
+	float:left;
+}
+.footer
+{
+	margin-top:10px;
+}
+.line_left_menu
+{
+	width:190px;
+	color:#FFFFFF;
+	size:3;
+}
+.img_footer
+{
+	width:150px;
+	height:150px;
+	background-color:#FFFFFF;
+}
+
+/* BELOW CSS IS SPECIFIC FOR STUDENT */
+
+.menu_left_row_students
+{
+	font-size:18px;
+	line-height:14px;
+	font-size:x-large;
+	color:#CCCCCC;
+}
+.profile_pic
+{
+	padding-top:7px;
+	padding-bottom:12px;
+	width:140px;
+	height:140px;
+}
+.profile_text
+{
+	line-height:32px;
+	font-size:16px;
+	text-align:left;
+}
+.link_edit
+{
+	font-size:16px;
+	text-align:right;
+	color:#CCCCCC;
+}
+.link_profile_edit
+{
+	line-height:12px;
+	text-align:right;
+	padding-bottom:7px;
+}
+.link_attendance
+{
+	font-size:14px;
+	color:#CCCCCC;
+	text-decoration:none;
+}
+
+/* BELOW CSS IS SPECIFIC FOR FACULTY */
+
+.drop_down
+{
+	text-align:center;
+	margin-left:10px;	
+	margin-right:10px;
+	width:170px;
+}
+
+/* BELOW CSS IS SPECIFIC FOR ADMIN */
+
+.div_middle_right_right_bottom
+{
+	width:205px;
+	color:#CCCCCC;
+}
+.menu_right
+{
+	width:205px;
+	text-align:center;
+}
+.menu_right_row_students
+{
+	font-size:18px;
+	line-height:14px;
+	font-size:x-large;
+}
+.line_right_menu
+{
+	width:190px;
+	color:#FFFFFF;
+	size:3;
+}
+.link_menu_right
+{
+	text-decoration:none;
+	font-size:x-large;
+	color:#CCCCCC;
+}

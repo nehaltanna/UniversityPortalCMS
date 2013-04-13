@@ -1,0 +1,576 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<?php 
+	if(isset($_POST['login']))
+	{
+		if(preg_match("[0-9]{11}",$_POST['uname'])) 
+		{
+			$sql="select count(*) from students where stud_id='$_POST[uname]' and student_passwd='$_POST[passwd]'";
+			$result=mysql_query($sql,$con);
+			$row=mysql_fetch_row($result);
+			if($row[0]==1)
+			{
+				session_start();
+				$_SESSION['username']=$_POST['uname'];
+				$_SESSION['type']="student";
+				header('refresh: 3; url=students_home.php');			
+			}
+			else 
+			{
+				echo "<script>alert(Your student login ID and password does not match.)</script>";
+			}		
+		}
+		else if($_POST['uname']=="admin")
+		{
+			$p=sha1($_POST['passwd']);
+			$sql="select count(*) from admin where admin_passwd='$p'";
+			$result=mysql_query($sql,$con);
+			$row=mysql_fetch_row($result);
+			if($row[0]==1)
+			{
+				session_start();
+				$_SESSION['username']="admin";
+				$_SESSION['type']="admin";
+				header('refresh: 3; url=admin_home.php');			
+			}
+			else 
+			{
+				echo "<script>alert(Your admin login ID and password does not match.)</script>";
+			}
+		}
+		else 
+		{
+			$sql="select count(*) from faculties where faculty_id='$_POST[uname]' and faculty_passwd='$_POST[passwd]'";
+			$result=mysql_query($sql,$con);
+			$row=mysql_fetch_row($result);
+			if($row[0]==1)
+			{
+				session_start();
+				$_SESSION['username']=$_POST['uname'];
+				$_SESSION['type']="faculty";
+				header('refresh: 3; url=faculty_home.php');			
+			}
+			else 
+			{
+				echo "<script>alert(Your faculty login ID and password does not match.)</script>";
+			}
+		}
+	}
+	else 
+	{
+		session_start();
+		if(isset($_SESSION['username']))
+		{
+			$uname=$_SESSION['username'];
+			$type=$_SESSION['type'];
+		}
+		else 
+		{
+			$uname="Guest";
+			$type="guest";
+		}	
+	}	
+	if($_GET['logout']=="yes") 
+	{
+		session_unset();
+		$uname="Guest";
+		$type="guest";
+	}
+?>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+<link rel="stylesheet" href="../styles/layout.css" type="text/css" />
+<title>Welcome To SICSR.</title>
+
+<script type="text/javascript" >
+var timeout	= 500;
+var closetimer	= 0;
+var ddmenuitem	= 0;
+
+// open hidden layer
+function mopen(id)
+{	
+	// cancel close timer
+	mcancelclosetime();
+
+	// close old layer
+	if(ddmenuitem) ddmenuitem.style.visibility = 'hidden';
+
+	// get new layer and show it
+	ddmenuitem = document.getElementById(id);
+	ddmenuitem.style.visibility = 'visible';
+
+}
+// close showed layer
+function mclose()
+{
+	if(ddmenuitem) ddmenuitem.style.visibility = 'hidden';
+}
+
+// go close timer
+function mclosetime()
+{
+	closetimer = window.setTimeout(mclose, timeout);
+}
+
+// cancel close timer
+function mcancelclosetime()
+{
+	if(closetimer)
+	{
+		window.clearTimeout(closetimer);
+		closetimer = null;
+	}
+}
+
+// close layer when click-out
+document.onclick = mclose; 
+</script>
+
+</head>
+<body background="../images/background-001.jpg">
+<div class="div_main">
+
+	<div class="div_header">
+	
+		<div class="div_header_top">
+		  <strong class="font_strong">Welcome <a href="edit_student.php" class="link_regular"><?php echo $uname; ?></a>&nbsp;
+		 (&nbsp;
+		 <?php
+		 	if($uname=="Guest")
+		 	{
+		 		echo "<a href='home.php' class='link_regular'>Login</a>";	
+		 	}
+		 	else 
+		 	{
+		 		echo "<a href='home.php?logout=yes' class='link_regular'>Logout</a>";
+		 	}
+		 ?>
+		 &nbsp;)&nbsp;</strong>
+		</div>
+		
+		<div class="div_header_middle">
+			<img src="../images/sicsr-head.jpg" class="img_header"/>
+		</div>
+		
+		<div class="div_header_bottom">
+		  <form action="#" method="post" id="sitesearch">	
+          	<strong class="font_strong">Search&nbsp;&nbsp;</strong>
+          	<input type="text" value="Search In Website" size="30" />
+          	<input name="image" type="image" class="search_button" id="search" src="../images/magnifying_glass.png" alt="Search" />
+          	&nbsp;&nbsp; &nbsp; 
+	      </form>
+		</div>
+	</div>
+	
+	<div class="div_menu">
+	 	<table class="menu_table">
+		<tr>
+		<td><a class="link_menu" href="home.php">Home</a></td>
+		<td><a class="link_menu" href="#" onmouseover="mopen('m1')" onmouseout="mclosetime()">Programmes</a></td>
+		<div id="m1" onmouseover="mcancelclosetime()" onmouseout="mclosetime()">
+		<?php
+				$sql="select prg_id from programmes";
+				$result=mysql_query($sql,$con);
+				while($row=mysql_fetch_row($result))
+				{
+					echo "<a href=programmes.php?pid=".$row[0].">$row[0]</a>";
+				}
+		?>
+		</div>          			
+		<td><a class="link_menu" href="faculty.php">Faculty</a></td>
+		<td><a class="link_menu" href="#" onmouseover="mopen('m2')" onmouseout="mclosetime()">PhotoGallery</a></td>
+		<div id="m2" onmouseover="mcancelclosetime()" onmouseout="mclosetime()">
+		<?php
+				$sql="select event_id from events";
+				$result=mysql_query($sql,$con);
+				while($row=mysql_fetch_row($result))
+				{
+					echo "<a href=photogallery.php?gid=".$row[0].">$row[0]</a>";
+				}
+		?>
+		</div> 
+		<td><a class="link_menu" href="#" onmouseover="mopen('m3')" onmouseout="mclosetime()">Placement</a></td>
+		<div id="m3" onmouseover="mcancelclosetime()" onmouseout="mclosetime()">
+			<a href="placementcell.php">Placement Cell</a>
+			<a href="placementstats.php">Placement Statistic</a>
+		</div>
+		<td><a class="link_menu" href="#" onmouseover="mopen('m4')" onmouseout="mclosetime()">Events</a></td>
+		<?php
+				$sql="select event_id from events";
+				$result=mysql_query($sql,$con);
+				while($row=mysql_fetch_row($result))
+				{
+					echo "<a href=events.php?eid=".$row[0].">$row[0]</a>";
+				}
+		?>
+		<td><a class="link_menu" href="contactus.php">ContactUS</a></td>						
+		</tr>
+		<div style="clear:both"></div>
+		</table>
+	</div>
+	
+	<div class="div_middle">
+		<?php
+			if($type=="guest")
+			{
+		?>
+		<div class="div_middle_left">
+		<table class="menu_left">
+		<tr class="menu_left_row"><td><a href="#" class="link_menu_left">Web mail</a></td></tr>
+		<tr class="menu_left_row"><td><hr class="line_left_menu" /></td></tr>
+		<tr class="menu_left_row"><td><a href="#" class="link_menu_left">SICSR Wiki</a></td></tr>
+		<tr class="menu_left_row"><td><hr class="line_left_menu" /></td></tr>
+		<tr class="menu_left_row"><td><a href="#" class="link_menu_left">Moodle</a></td></tr>
+		<tr class="menu_left_row"><td><hr class="line_left_menu" /></td></tr>
+		<tr class="menu_left_row"><td><a href="#" class="link_menu_left">Saggitarious</a></td></tr>
+		<tr class="menu_left_row"><td><hr class="line_left_menu" /></td></tr>
+		<tr class="menu_left_row"><td><a href="#" class="link_menu_left">Oracle Express</a></td></tr>
+		<tr class="menu_left_row"><td><hr class="line_left_menu" /></td></tr>
+		<tr class="menu_left_row"><td><a href="#" class="link_menu_left">Take a tour</a></td></tr>
+		<tr class="menu_left_row"><td><hr class="line_left_menu" /></td></tr>
+		<tr class="menu_left_row"><td><a href="#" class="link_menu_left">Director's Desk</a></td></tr>
+
+		<tr><td><a href="#" style="text-decoration:none;"><h3 class="title">Our Recruiters</h3></a></td></tr>
+		<tr class="menu_left_row">
+			<td>
+			<marquee direction="up">
+			<?php
+				$dir="images/recruiters";
+				if (is_dir($dir)) 
+	   		{
+	     			while($f=scandir($dir)) 
+	     			{
+	       			if($f=="." || $f=="..")
+	       			{
+	       				continue;
+	       			}
+	       			else 
+	       			{
+	       				echo "<img class=img_recruiters src=".$dir."/".$f.">";
+	       			}
+	     			}
+	     		}
+	     	?>
+			</marquee>
+		  </td>
+		</tr>
+		</table>
+		</div>
+		<?php
+		}
+		else if($type=="student")
+		{
+		?>
+		<div class="div_middle_left">
+		<form id="profile_display">
+		<table class="menu_left">
+			<?php
+				$sql="select fname,lname,student_photo from students where stud_id='$uname'";
+				$result=mysql_query($sql,$con);
+				$row=mysql_fetch_row($result);
+			?>
+			<tr class="menu_left_row_students"><td>
+			<?php
+				echo "<img src=images/students/".$row[2]." class='profile_pic' />";
+			?>
+			</td></tr>
+			<tr class="menu_left_row_students">
+					  <td class="profile_text">Name: <?php echo "$row[0] $row[1]"; ?> </td>
+			</tr>
+			<tr class="menu_left_row_students">
+					<td class="profile_text">PRN : <?php echo "$uname"; ?> </td>
+			</tr>
+			<tr class="menu_left_row_students">
+				<td class="link_profile_edit"><a href="edit_student.php" class="link_edit">edit</a>&nbsp;&nbsp;</td>
+			</tr>
+			<tr class="menu_left_row_students">
+			<?php
+				$p=0;
+				$t=0;
+				$sql="select distinct start_date,end_date from attendance where stud_id='$uname'";
+				$result = mysql_query($sql,$con);
+				while($row = mysql_fetch_row($result)) 
+				{
+					$sql1="select sub_id,total_lectures,no_absent from attendance where stud_id='$prn' and start_date='$row[0]' and end_date='$row[1]'";
+					$result1 = mysql_query($sql1,$con);					 
+					while($row1 = mysql_fetch_row($result1))
+					{
+							$t=$t+$row1[1];
+							$p=$p+($row1[1]-$row1[2]);
+					}
+			  }
+			  $val=($p*100)/$t;
+			  $att=round($val,2);
+			?>
+				<td class="profile_text"><a href="attendance.php" class="link_attendance">Overall Attendance <?php echo $att; ?></a>%</td>
+			</tr>
+			<tr class="menu_left_row_students"><td><hr class="line_left_menu"/></td></tr>
+			<tr class="menu_left_row_students"><td><a href="notes.php" class="link_menu_left">Notes</a></td></tr>
+			<tr class="menu_left_row_students"><td><hr class="line_left_menu"/></td></tr>
+			<tr class="menu_left_row_students"><td><a href="resources/users/" class="link_menu_left">Resources</a></td></tr>
+			<tr class="menu_left_row_students"><td><hr class="line_left_menu"/></td></tr>
+			<tr class="menu_left_row_students"><td><a href="assignment.php" class="link_menu_left">Assignments</a></td></tr>
+			<tr class="menu_left_row_students"><td><hr class="line_left_menu"/></td></tr>
+			<tr class="menu_left_row_students"><td><a href="posts.php" class="link_menu_left">Posts</a></td></tr>
+			<tr class="menu_left_row_students"><td><hr class="line_left_menu"/></td></tr>
+			<tr class="menu_left_row_students"><td><a href="time_table.php" class="link_menu_left">Time Table</a></td></tr>
+			<tr class="menu_left_row_students"><td><hr class="line_left_menu"/></td></tr>
+			<tr class="menu_left_row_students"><td><a href="results.php" class="link_menu_left">Results</a></td></tr>
+			<tr class="menu_left_row_students"><td><hr class="line_left_menu"/></td></tr>
+		</table>
+		</form>
+		</div>
+		<?php
+		}
+		else if($type=="faculty")
+		{
+		?>
+		<div class="div_middle_left">
+		<form id="profile_display">
+		<table class="menu_left">
+			<?php
+				$sql="select faculty_photo from faculties where faculty_id='$uname'";
+				$result=mysql_query($sql,$con);
+				$row=mysql_fetch_row($result);
+			?>
+			<tr class="menu_left_row_students"><td>
+			<?php
+				echo "<img src=images/faculties/".$row[0]." class='profile_pic' />";
+			?>
+			</td></tr>
+			<tr class="menu_left_row_students">
+					  <td class="profile_text">Name: <?php echo $uname; ?></td>
+			</tr>
+			<tr class="menu_left_row_students">
+				<td class="link_profile_edit"><a href="edit_faculty.php" class="link_edit">edit</a>&nbsp;&nbsp;</td>
+			</tr>
+			<tr class="menu_left_row_students"><td><hr class="line_left_menu"/></td></tr>
+			<tr class="menu_left_row_students"><td><a href="edit_attendance.php" class="link_menu_left">Attendence</a></td></tr>
+			<tr class="menu_left_row_students"><td><hr class="line_left_menu"/></td></tr>
+			<tr class="menu_left_row_students"><td><a href="edit_notes.php" class="link_menu_left">Notes</a></td></tr>
+			<tr class="menu_left_row_students"><td><hr class="line_left_menu"/></td></tr>
+			<tr class="menu_left_row_students"><td><a href="resources/" class="link_menu_left">Resources</a></td></tr>
+			<tr class="menu_left_row_students"><td><hr class="line_left_menu"/></td></tr>
+			<tr class="menu_left_row_students"><td><a href="edit_assignments.php" class="link_menu_left">Assignments</a></td></tr>
+			<tr class="menu_left_row_students"><td><hr class="line_left_menu"/></td></tr>
+			<tr class="menu_left_row_students"><td><a href="posts.php" class="link_menu_left">Posts</a></td></tr>
+			<tr class="menu_left_row_students"><td><hr class="line_left_menu"/></td></tr>
+			<tr class="menu_left_row_students"><td><a href="edit_time_table.php" class="link_menu_left">Time Table</a></td></tr>
+			<tr class="menu_left_row_students"><td><hr class="line_left_menu"/></td></tr>
+			<tr class="menu_left_row_students"><td><a href="edit_results.php" class="link_menu_left">Results</a></td></tr>
+		</table>
+		</form>
+		</div>
+		<?php
+		}
+		else if($type=="admin")
+		{
+		?>
+		<div class="div_middle_left">
+		<form id="profile_display">
+		<table class="menu_left">
+			<tr class="menu_left_row_students">
+					  <td class="profile_text">Name: admin</td>
+			</tr>
+			<tr class="menu_left_row_students">
+				<td class="link_profile_edit"><a href="admin.php" class="link_edit">edit</a>&nbsp;&nbsp;</td>
+			</tr>
+			<tr class="menu_left_row_students"><td><hr class="line_left_menu"/></td></tr>
+			<tr class="menu_left_row_students"><td><a href="edit_attendance.php" class="link_menu_left">Attendence</a></td></tr>
+			<tr class="menu_left_row_students"><td><hr class="line_left_menu"/></td></tr>
+			<tr class="menu_left_row_students"><td><a href="edit_notes.php" class="link_menu_left">Notes</a></td></tr>
+			<tr class="menu_left_row_students"><td><hr class="line_left_menu"/></td></tr>
+			<tr class="menu_left_row_students"><td><a href="resources/" class="link_menu_left">Resources</a></td></tr>
+			<tr class="menu_left_row_students"><td><hr class="line_left_menu"/></td></tr>
+			<tr class="menu_left_row_students"><td><a href="edit_assignments.php" class="link_menu_left">Assignments</a></td></tr>
+			<tr class="menu_left_row_students"><td><hr class="line_left_menu"/></td></tr>
+			<tr class="menu_left_row_students"><td><a href="edit_posts.php" class="link_menu_left">Posts</a></td></tr>
+			<tr class="menu_left_row_students"><td><hr class="line_left_menu"/></td></tr>
+			<tr class="menu_left_row_students"><td><a href="edit_time_table.php" class="link_menu_left">Time Table</a></td></tr>
+			<tr class="menu_left_row_students"><td><hr class="line_left_menu"/></td></tr>
+			<tr class="menu_left_row_students"><td><a href="edit_results.php" class="link_menu_left">Results</a></td></tr>
+		</table>
+		</form>
+		</div>
+		<?php
+		}
+		?>
+		<div class="div_middle_right">
+		
+			<div class="div_middle_right_left">
+			
+			</div>
+			
+			<div class="div_middle_right_right">
+			<?php
+			if($type=="guest")
+			{
+			?>
+				<div>
+				<table class="tbl_login">
+					<tr class="tbl_login_row"><td colspan="2"><strong class="font_strong">Login</strong></td></tr>
+					<tr class="tbl_login_row"><td>Username</td><td><input type="text" name="uname" size="13"></td></tr>
+					<tr class="tbl_login_row"><td>Password</td><td><input type="password" name="passwd" size="13"</td></tr>
+					<tr class="tbl_login_row"><td>&nbsp;</td><td><input type="submit" name="login" value="login" /></td></tr>
+				</table>
+				</div>
+			<?php
+			}
+			?>	
+				<div class="div_middle_right_right_middle">
+				 <h3 class="title">Calender of Events</h3>
+		            <div id="calendar_wrap">
+					<table summary="Calendar" align="center">
+						<h2 align="center">
+						december 2011
+						</h3>
+						<thead>
+							<tr>
+								<th abbr="Monday" scope="col" title="Monday">M</th>
+								<th abbr="Tuesday" scope="col" title="Tuesday">T</th>
+								<th abbr="Wednesday" scope="col" title="Wednesday">W</th>
+								<th abbr="Thursday"  scope="col" title="Thursday">T</th>
+								<th abbr="Friday" scope="col" title="Friday">F</th>
+								<th abbr="Saturday" scope="col" title="Saturday">S</th>
+								<th abbr="Sunday" scope="col" title="Sunday">S</th>
+							</tr>
+						</thead>
+						<tfoot>
+							<tr>
+								<td abbr="September" colspan="3" id="prev"><a href="#" title="View posts for September 2007">&laquo;nov</a></td>
+								<td class="pad">&nbsp;</td>
+								<td colspan="3" id="next">&nbsp;</td>
+							</tr>
+						</tfoot>
+						<tbody>
+							<tr>
+								<td>1</td>
+								<td>2</td>
+								<td>3</td>
+								<td id="today">4</td>
+								<td>5</td>
+								<td>6</td>
+								<td>7</td>
+							</tr>
+							<tr>
+								<td>8</td>
+								<td>9</td>
+								<td>10</td>
+								<td>11</td>
+								<td>12</td>
+								<td>13</td>
+								<td>14</td>
+							</tr>
+							<tr>
+								<td>15</td>
+								<td>16</td>
+								<td>17</td>
+								<td>18</td>
+								<td>19</td>
+								<td>20</td>
+								<td>21</td>
+							</tr>
+							<tr>
+								<td>22</td>
+								<td>23</td>
+								<td>24</td>
+								<td>25</td>
+								<td>26</td>
+								<td>27</td>
+								<td>28</td>
+							</tr>
+							<tr>
+								<td>29</td>
+								<td>30</td>
+								<td>31</td>
+								<td class="pad" colspan="4">&nbsp;</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+				
+				<?php
+				if($type=="admin")
+				{
+				?>
+				<div class="div_middle_right_right_bottom">
+					<table class="menu_right">
+						<tr class="menu_right_row_students"><td><hr class="line_right_menu"/></td></tr>
+						<tr class="menu_right_row_students"><td><a href="#" class="link_menu_right">Accounts</a></td></tr>
+						<tr class="menu_right_row_students"><td><hr class="line_right_menu"/></td></tr>
+						<tr class="menu_right_row_students"><td><a href="edit_photogallery.php" class="link_menu_right">Photogallery</a></td></tr>
+						<tr class="menu_right_row_students"><td><hr class="line_right_menu"/></td></tr>
+						<tr class="menu_right_row_students"><td><a href="edit_programmes.php" class="link_menu_right">Programmes</a></td></tr>
+						<tr class="menu_right_row_students"><td><hr class="line_right_menu"/></td></tr>
+						<tr class="menu_right_row_students"><td><a href="edit_faculties.php" class="link_menu_right">Faculties</a></td></tr>
+						<tr class="menu_right_row_students"><td><hr class="line_right_menu"/></td></tr>
+						<tr class="menu_right_row_students"><td><a href="edit_events.php" class="link_menu_right">Events</a></td></tr>
+						<tr class="menu_right_row_students"><td><hr class="line_right_menu"/></td></tr>
+						<tr class="menu_right_row_students"><td><a href="edit_recruiters.php" class="link_menu_right">Recruiters</a></td></tr>
+						<tr class="menu_right_row_students"><td><hr class="line_right_menu"/></td></tr>
+					</table>					
+				</div>
+				<?php
+				}
+				else
+				{
+				?>
+				<div>
+					<h3 class="title">Events of the month</h3>
+					<center style="padding-bottom:12px;">
+						<img class="img_recruiters" src="../images/events.png"/>
+					</center>
+				</div>
+				<?php
+				}
+				?>
+			</div>
+		</div>
+	</div>
+		
+	<div class="div_footer">
+		<div class="footer_menu">
+					<table class="menu_table">
+					<tr>
+					<td><a class="link_menu" href="#">Cyberoam</a></td>
+					<td><a class="link_menu" href="#">Web mail</a></td>
+					<td><a class="link_menu" href="#">SICSR Wiki</a></td>
+					<td><a class="link_menu" href="#">Moodle</a></td>
+					<td><a class="link_menu" href="#">Oracle Express</a></td>
+					<td><a class="link_menu" href="#">Saggitarious</a></td>
+					</tr>
+					</table>
+		</div>	
+		<div class="div_footer_left">				
+			<span class="footer_image">
+				<img src="../images/sicsr.jpg" class="img_footer" />
+			</span>
+			<span class="div_footer_left_text">
+			<u>SICSR CENTER</u><br />
+			&nbsp;Atur Center, <br />
+			&nbsp;Gokhlenagar Road,<br />
+			&nbsp;Modal Colony,<br />
+			&nbsp;Pune - 16<br />
+			</span>
+		</div>
+		
+		<div class="div_footer_right">
+		
+		  <div class="div_footer_right_left">
+				<u><span style="font-size:24px;line-height:34px;">About SICSR</span></u><br />
+				A national leader in graduation rates, undergraduate research, and graduate, SICSR offers the benefits of larger schools with the student-centered approach of  undergraduate college. </div>
+			
+			<div class="div_footer_right_right">
+			<span style="font-size:24px;">
+			Follow us on<br  /></span>
+			<img src="../images/sicsr-fb.jpg" style="margin-top:5px; margin-bottom:5px;" /><br  />
+			15,948 people like Symbiosis Institute of Computer Studies and Research, Pune
+			</div>
+		</div>
+	</div>	
+</div>
+</body>
+</html>
